@@ -1,29 +1,34 @@
 import json
 
 def analyze(evt):
-    print("Analyzing")
+    # dynamically get this from evt
+    return {
+        "Name": "test",
+        "Sev" :  9.9,
+        "Type": "Ransomware"
+    }
 
 
-def asff_format(evt):
-    print("formatting")
+def asff_format(d, evt):
+    print(f"{evt.get('Name')}")
 
 def main():
     with open('events.json', 'r') as f:
         evt_data = json.load(f)
     # print(json.dumps(evt_data, indent=2))
-
-    for _, event in evt_data.items():
-        evt_id = event[0].get('Id')
+    events = evt_data.get('findings'.title())
+    for event in events:
+        evt_id = event.get('Id')
         detection = analyze(evt_data)
         if not detection:
             print(f"Event: {evt_id} is clean")
         else:
             print(f"Threat detected in: {evt_id}")
-
-    
-    print(f"Formatting events: {evt_id}")
-    asff_format(evt_data)
-
+            for d in detection:
+                asff_evt = asff_format(d, event) # pass in analyze finidings, and event
+                # auto remediate func
+                # pass in asff evt
+        print("********************************\n")
 
 
 
