@@ -3,17 +3,24 @@ import json
 def analyze(evt):
     print("Analyzing")
 
+
 def asff_format(evt):
     print("formatting")
 
 def main():
     with open('events.json', 'r') as f:
         evt_data = json.load(f)
-    print(json.dumps(evt_data, indent=2))
+    # print(json.dumps(evt_data, indent=2))
 
-    evt_id = evt_data.get('Findings')[0].get('Id')
-    print(f"Analyzing events: {evt_id}")
-    analyze(evt_data)
+    for _, event in evt_data.items():
+        evt_id = event[0].get('Id')
+        detection = analyze(evt_data)
+        if not detection:
+            print(f"Event: {evt_id} is clean")
+        else:
+            print(f"Threat detected in: {evt_id}")
+
+    
     print(f"Formatting events: {evt_id}")
     asff_format(evt_data)
 
